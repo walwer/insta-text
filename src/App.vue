@@ -8,7 +8,7 @@
         <textarea class="input title-prima" placeholder="Type in here your title..."></textarea>
         <textarea class="input textarea" contenteditable="true" placeholder="Type in here your story..."></textarea>
       </div>
-      <div class="save btn">
+      <div class="save btn" @click="makeImage">
         <span>Save as an image</span>
       </div>
     </div>
@@ -16,6 +16,8 @@
 </template>
 <script>
   import $ from 'jquery';
+  import html2canvas from 'html2canvas';
+
   export default {
       mounted() {
           function autoresize(textarea) {
@@ -30,6 +32,33 @@
                   this.style.height = (this.scrollHeight+10)+'px';
               });
           });
+      },
+      methods: {
+          makeImage: function(){
+            let element = $('.form').get(0);
+            const startingWidth = $(element).innerWidth();
+            const TARGET_WIDTH = 1080;
+            const TARGET_HEIGHT = 1920;
+            const scaleRatio = TARGET_WIDTH/startingWidth;
+
+            const primeTextSize = 40;
+            const textAreaSize = 25;
+            console.log(primeTextSize);
+            // console.log(startingPoint);
+            let type = 'png';
+            let copyElement = element;
+            copyElement.style.height = `${TARGET_HEIGHT}px`;
+            copyElement.style.width = `${TARGET_WIDTH}px`;
+            copyElement.style.border = 'none';
+
+
+            html2canvas(element)
+                .then((canvas)=>{
+                    // $(element).remove();
+                    // canvas.scale(2);
+                    // Canvas2Image.saveAsPNG(canvas,1080,1920,'file');
+                });
+          }
       }
   }
 </script>
@@ -75,6 +104,7 @@
         border: 1px dashed #CCC;
         padding: 50px;
         border-radius: 10px;
+        overflow: hidden;
         .input {
           outline: none;
           margin: 0;
