@@ -5,8 +5,8 @@
     </div>
     <div class="center">
       <div class="form">
-        <textarea class="input title-prima" placeholder="Type in here your title..."></textarea>
-        <textarea class="input textarea" contenteditable="true" placeholder="Type in here your story..."></textarea>
+        <textarea class="input title-prima" cols="10" id="main-self" placeholder="Type in here your title..."></textarea>
+        <textarea class="input textarea" cols="18" id="sub-self" contenteditable="true" placeholder="Type in here your story..." href="plik.png"></textarea>
       </div>
       <div class="save btn" @click="makeImage">
         <span>Save as an image</span>
@@ -36,27 +36,12 @@
       methods: {
           makeImage: function(){
             let element = $('.form').get(0);
-            const startingWidth = $(element).innerWidth();
-            const TARGET_WIDTH = 1080;
-            const TARGET_HEIGHT = 1920;
-            const scaleRatio = TARGET_WIDTH/startingWidth;
-
-            const primeTextSize = 40;
-            const textAreaSize = 25;
-            console.log(primeTextSize);
-            // console.log(startingPoint);
-            let type = 'png';
-            let copyElement = element;
-            copyElement.style.height = `${TARGET_HEIGHT}px`;
-            copyElement.style.width = `${TARGET_WIDTH}px`;
-            copyElement.style.border = 'none';
-
-
+            $(element).css('transform','scale(4)');
+            $(element).css('border','none');
             html2canvas(element)
                 .then((canvas)=>{
-                    // $(element).remove();
-                    // canvas.scale(2);
-                    // Canvas2Image.saveAsPNG(canvas,1080,1920,'file');
+                    $(element).remove();
+                    Canvas2Image.saveAsPNG(canvas,1080,1920);
                 });
           }
       }
@@ -77,15 +62,17 @@
 
     .header {
       width: 100vw;
-      background: #FFF;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       display: flex;
+      justify-content: center;
+      align-items: center;
       flex-direction: column;
 
       .title {
-        padding: 10px;
+        padding: 30px;
         margin: 0;
-        color: #444;
+        font-size: 20px;
+
+        color: #333;
       }
 
     }
@@ -102,16 +89,19 @@
         align-items: flex-start;
         text-align: left;
         border: 1px dashed #CCC;
-        padding: 50px;
         border-radius: 10px;
         overflow: hidden;
+        width: 270px;
+        height: 480px;
+        box-sizing: border-box;
+        padding: 25px;
         .input {
           outline: none;
           margin: 0;
           padding: 0;
           border: 0;
           resize: vertical;
-          padding: 10px;
+          /*padding: 10px;*/
           text-align: left;
           font-family: "Times New Roman";
           font-size: 25px;
@@ -122,8 +112,9 @@
           }
           &.textarea {
             font-style: italic;
-            width: 100%;
+            width: max-content;
             box-sizing: border-box;
+
           }
         }
       }
