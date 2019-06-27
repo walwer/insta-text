@@ -1,12 +1,21 @@
 <template>
   <div id="main">
     <div class="header">
-      <h1 class="title">yourQuotes</h1>
+      <h1 class="title">instaquotes</h1>
     </div>
     <div class="center">
+      <div class="options">
+        <h3>options</h3>
+        <div class="option-group">
+          <label for="font-selection">Font</label>
+          <select name="font-selection" id="font-selection" v-model="currentFont">
+            <option v-for="font in fonts" :key="font" :value="font">{{font}}</option>
+          </select>
+        </div>
+      </div>
       <div class="form">
-        <textarea class="input title-prima" cols="10" id="main-self" placeholder="Type in here your title..."></textarea>
-        <textarea class="input textarea" cols="18" id="sub-self" contenteditable="true" placeholder="Type in here your story..." href="plik.png"></textarea>
+        <div contenteditable="true" :style="{'fontFamily':currentFont}" class="input title-prima" cols="10" id="main-self" placeholder="Type in here your title..."></div>
+        <div contenteditable="true" :style="{'fontFamily':currentFont}" class="input textarea" cols="18" id="sub-self" placeholder="Type in here your story..." href="plik.png"></div>
       </div>
       <div class="save btn" @click="makeImage">
         <span>Save as an image</span>
@@ -19,29 +28,57 @@
   import html2canvas from 'html2canvas';
 
   export default {
-      mounted() {
-          function autoresize(textarea) {
-              textarea.style.height = '0px';     //Reset height, so that it not only grows but also shrinks
-              textarea.style.height = (textarea.scrollHeight+10) + 'px';    //Set new height
+      data() {
+          return {
+              fonts: ['Times New Roman','Arial','Tahoma'],
+              currentFont: 'Times New Roman'
           }
-          $('textarea').keyup(function () {
-              autoresize(this);
-          });
-          $(function () {
-              $("textarea").each(function () {
-                  this.style.height = (this.scrollHeight+10)+'px';
+      },
+      mounted() {
+          // function autoresize(textarea) {
+          //     textarea.style.height = '0px';     //Reset height, so that it not only grows but also shrinks
+          //     textarea.style.height = (textarea.scrollHeight+10) + 'px';    //Set new height
+          // }
+          // $('textarea').keyup(function () {
+          //     autoresize(this);
+          // });
+          // $(function () {
+          //     $("textarea").each(function () {
+          //         this.style.height = (this.scrollHeight+10)+'px';
+          //     });
+          // });
+          $('div[contenteditable]').each(function(){
+              $(this).html($(this).attr('placeholder'));
+              $(this).addClass('placeholder');
+              $(this).focus(()=>{
+                  $(this).removeClass('placeholder');
+                  if($(this).html() === $(this).attr('placeholder')){
+                      $(this).html("");
+                      $(this).focus();
+                  }
               });
+              $(this).blur(()=>{
+                  if($(this).html().length === 0){
+                      $(this).html($(this).attr('placeholder'));
+                      $(this).addClass('placeholder');
+                  }
+              });
+
           });
       },
       methods: {
           makeImage: function(){
+
             let element = $('.form').get(0);
-            $(element).css('transform','scale(4)');
+            // $(element).css('transform','scale(2)');
             $(element).css('border','none');
+
             html2canvas(element)
                 .then((canvas)=>{
                     $(element).remove();
-                    Canvas2Image.saveAsPNG(canvas,1080,1920);
+                    // let image = Canvas2Image.convertToPNG(canvas,canvas.width,canvas.height);
+                    // $('.center').append(image);
+                    Canvas2Image.saveAsPNG(canvas,canvas.width,canvas.height,'story_image');
                 });
           }
       }
@@ -81,7 +118,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 50px;
+      padding: 30px;
       .form {
         display: flex;
         flex-direction: column;
@@ -100,19 +137,24 @@
           margin: 0;
           padding: 0;
           border: 0;
-          resize: vertical;
-          /*padding: 10px;*/
+          /*resize: vertical;*/
+          padding: 5px;
+          /*height: 100px;*/
           text-align: left;
           font-family: "Times New Roman";
-          font-size: 25px;
+          font-size: 20px;
           resize: none;
           overflow: hidden;
+          max-width: 100%;
+          width: 100%;
+          &.placeholder {
+            opacity: 0.6;
+          }
           &.title-prima {
-            font-size: 40px;
+            font-size: 35px;
           }
           &.textarea {
             font-style: italic;
-            width: max-content;
             box-sizing: border-box;
 
           }
@@ -132,6 +174,26 @@
           color: #FFF;
 
         }
+      }
+      .options {
+        padding: 20px;
+        .option-group {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-gap: 10px;
+          width: min-content;
+          .h3 {
+            color: #555;
+          }
+          select {
+            padding: 10px 20px;
+            font-size: 15px;
+            outline: none;
+            border: none;
+            background: #FFF;
+          }
+        }
+
       }
     }
   }
