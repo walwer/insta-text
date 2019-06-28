@@ -71,9 +71,6 @@
             }
         },
         methods: {
-            reload: function () {
-                window.location.reload();
-            },
             selectFont: function (id) {
                 this.currentFont = id;
                 this.fontModal = false;

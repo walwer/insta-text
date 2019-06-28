@@ -9,7 +9,12 @@
 
 <script>
     export default {
-        name: "_step2"
+        name: "_step2",
+        methods: {
+            reload: function () {
+                window.location.reload();
+            }
+        }
     }
 </script>
 

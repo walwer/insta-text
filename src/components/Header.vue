@@ -20,6 +20,7 @@
     position: fixed;
     top: 0;
     left: 0;
+    background: #FFF;
   .title {
     padding: 30px;
     margin: 0;
